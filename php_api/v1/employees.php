@@ -22,6 +22,11 @@
             $id = intval($_GET['id']);
             update_pegawai($id);
             break;
+    
+        case 'DELETE':
+            $id = intval($_GET['id']);
+            del_pegawai($id);
+            break;
 
         default:
             header("");
@@ -94,12 +99,30 @@
         if (mysqli_query($connection, $query)) {
             $resp = array(
                 'status' => 1,
-                'status_message' => 'Employee Added Successfully.'
+                'status_message' => 'Employee Updated Successfully.'
             );
         } else {
             $resp = array(
                 'status' => 0,
-                'status_message' => 'Employee Addition Failed'
+                'status_message' => 'Employee Update Failed'
+            );
+        }
+        header('Content-Type: application/json');
+        echo json_encode($resp);
+    }
+
+    function del_pegawai($id) {
+        global $connection;
+        $query = "DELETE FROM `pegawai` WHERE `id`='$id'";
+        if (mysqli_query($connection, $query)) {
+            $resp = array(
+                'status' => 1,
+                'status_message' => 'Employee Deleted Successfully.'
+            );
+        } else {
+            $resp = array(
+                'status' => 0,
+                'status_message' => 'Employee Delete Failed'
             );
         }
         header('Content-Type: application/json');
