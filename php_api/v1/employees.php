@@ -13,8 +13,15 @@
                 get_pegawai();
             }
             break;
+
         case 'POST':
             insert_pegawai();
+            break;
+
+        case 'PUT':
+            $id = intval($_GET['id']);
+            update_pegawai($id);
+            break;
 
         default:
             header("");
@@ -73,4 +80,29 @@
         header('Content-Type: application/json');
         echo json_encode($resp);
     } 
+
+    function update_pegawai($id) {
+        global $connection;
+        $data = json_decode(file_get_contents('php://input'), TRUE);
+        $name = $data["name"];
+        $salary = $data["salary"];
+        $age = $data["age"];
+        echo $query = "UPDATE `pegawai` SET
+        `name` = '$name',
+        `salary` = '$salary',
+        `age` = '$age' WHERE `id` = '$id'";
+        if (mysqli_query($connection, $query)) {
+            $resp = array(
+                'status' => 1,
+                'status_message' => 'Employee Added Successfully.'
+            );
+        } else {
+            $resp = array(
+                'status' => 0,
+                'status_message' => 'Employee Addition Failed'
+            );
+        }
+        header('Content-Type: application/json');
+        echo json_encode($resp);
+    }
 ?>
